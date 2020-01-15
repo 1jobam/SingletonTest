@@ -13,6 +13,7 @@ public class MemberVO {
 	private String mem_name; // 이름
 	private String mem_tel; // 전화번호
 	private String mem_addr; // 수소
+	
 	public String getMem_id() {
 		return mem_id;
 	}
