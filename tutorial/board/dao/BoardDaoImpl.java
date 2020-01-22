@@ -8,11 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import board.vo.BoardVO;
+import kr.or.ddit.member.dao.MemberDaoImpl;
 import kr.or.ddit.util.DBUtil2;
 import kr.or.ddit.util.DBUtil3;
 
 public class BoardDaoImpl implements BoardDao{
+	
+	private static final Logger sqlLogger = Logger.getLogger("log4jexam.sql.Query");
+	private static final Logger paramLogger = Logger.getLogger("log4jexam.sql.Parameter");
+	private static final Logger resultLogger = Logger.getLogger(BoardDaoImpl.class);
 	
 	private static BoardDaoImpl dao;
 	
@@ -47,7 +54,10 @@ public class BoardDaoImpl implements BoardDao{
 		try {
 			conn = DBUtil3.getConnection();
 			
-			String sql = " insert into jdbc_board (board_no, board_title, board_writer, board_date, board_content) values (board_seq.nextVal, ?, ?, sysdate, ?) ";
+			String sql = " insert into jdbc_board (board_no, board_title, board_writer, board_date, board_content) values (board_seq.nextVal, ?, ?, sysdate, ?) a";
+			
+			sqlLogger.debug("쿼리(DBBUG) : " + sql);
+			sqlLogger.warn("쿼리(WARN) : " + sql);
 			
 			psta = conn.prepareStatement(sql);
 			
@@ -55,7 +65,11 @@ public class BoardDaoImpl implements BoardDao{
 			psta.setString(2, bv.getBoardWriter());
 			psta.setString(3, bv.getBoardContent());
 			
+			paramLogger.debug("파라미터 : (" + bv.getBoardTitle() + ", " + bv.getBoardWriter() + "," + bv.getBoardContent() + ")");
+			
 			cnt = psta.executeUpdate();
+			
+			resultLogger.fatal("결과 : " + cnt);
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
